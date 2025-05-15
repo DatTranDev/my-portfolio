@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import GithubIcon from "../../../public/github-icon.svg";
 import LinkedinIcon from "../../../public/linkedin-icon.svg";
+import GmailIcon from "../../../public/gmail-icon.svg";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -62,6 +63,9 @@ const EmailSection = () => {
           <Link href="https://www.linkedin.com/in/th%C3%A0nh-%C4%91%E1%BA%A1t-tr%E1%BA%A7n-7132b6292/">
             <Image src={LinkedinIcon} alt="Linkedin Icon" />
           </Link>
+          <Link href="https://mail.google.com/mail/?view=cm&fs=1&to=dattran.uit.se@gmail.com&su=Liên hệ hợp tác&body=Chào bạn Đạt,%0AMình muốn trao đổi về...">
+            <Image src={GmailIcon} alt="Gmail Icon" />
+          </Link>
         </div>
       </div>
       <div>
@@ -84,7 +88,7 @@ const EmailSection = () => {
                 id="email"
                 required
                 className="bg-[#18191E] border border-[#33353F] placeholder-[#9CA2A9] text-gray-100 text-sm rounded-lg block w-full p-2.5"
-                placeholder="jacob@google.com"
+                placeholder="example@gmail.com"
               />
             </div>
             <div className="mb-6">

@@ -37,7 +37,7 @@ const Navbar = () => {
         >
           <span class="font-mono text-sm md:text-5xl">
             <span class="text-white">DatTran</span>
-            <span class="text-pink-400">.Dev</span>
+            <span class="text-cyan-400">.Dev</span>
           </span>
 
         </Link>

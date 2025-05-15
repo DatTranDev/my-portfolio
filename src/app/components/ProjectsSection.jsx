@@ -8,56 +8,62 @@ const projectsData = [
   {
     id: 1,
     title: "Teaching Assistant",
-    description: "A mobile application that supports lecturers and students in managing classes, attendance, discussions, notifications, and feedback in real-time.",
+    description: "Mobile app for managing classes, attendance, discussions, and feedback in real-time.",
     image: "/images/projects/TeachingAssistant.png",
     tag: ["All", "Mobile"],
     gitUrl: "https://github.com/DatTranDev/TeachingAssistantBE",
-    previewUrl: 'https://drive.google.com/file/d/1Zjc40ntRcGHRqd_4H7RIh6JjEf2EVQdS/view',
+    previewUrl: "https://drive.google.com/file/d/1Zjc40ntRcGHRqd_4H7RIh6JjEf2EVQdS/view",
+    techStackIds: ["Node.js", "MongoDB", "React Native", "Firebase"]
   },
   {
     id: 2,
     title: "Expense Tracker",
-    description: "A mobile application that allows users to track income and expenses, visualize spending trends, and manage personal budgets.",
+    description: "App for tracking income, expenses, and personal budgets with visual insights.",
     image: "/images/projects/ExpenseTracker.png",
     tag: ["All", "Mobile"],
     gitUrl: "https://github.com/DatTranDev/ExpenseTrackerBE",
     previewUrl: "https://github.com/DatTranDev/ExpenseTrackerBE",
+    techStackIds: ["Node.js", "MongoDB", "Android", "Firebase"]
   },
   {
     id: 3,
     title: "Book Store Management System",
-    description: "A desktop-based system for managing bookstore operations, including inventory, sales, invoices, customer management, and reporting.",
+    description: "Desktop app to manage bookstore inventory, sales, customers, and reports.",
     image: "/images/projects/BookStore.png",
     tag: ["All", "Desktop"],
     gitUrl: "https://github.com/DatTranDev/QuanLiNhaSach-UIT",
     previewUrl: "https://github.com/DatTranDev/QuanLiNhaSach-UIT",
+    techStackIds: [".NET", "SQL Server"]
   },
   {
     id: 4,
     title: "Shoes Store",
-    description: "A modern web application for online shopping.",
+    description: "E-commerce website for browsing and purchasing shoes online.",
     image: "/images/projects/Ecommerce.png",
     tag: ["All", "Web"],
     gitUrl: "https://github.com/DatTranDev/EcommerceWeb",
     previewUrl: "https://github.com/DatTranDev/EcommerceWeb",
+    techStackIds: ["MySQL", "Java Servlet"]
   },
   {
     id: 5,
     title: "Skill Exchange",
-    description: "A mobile platform for users to connect and exchange skills through a matching system, chat rooms, and ELO-based ranking.",
+    description: "Mobile platform for matching users to exchange skills and chat via ELO-based system.",
     image: "/images/projects/SkillExchange.png",
     tag: ["All", "Mobile"],
     gitUrl: "https://github.com/DatTranDev/SkillExchange",
     previewUrl: "/",
+    techStackIds: ["Node.js", "MongoDB", "React Native", "Firebase"]
   },
   {
     id: 6,
     title: "Coffee Management",
-    description: "A web-based management system for coffee shop owners to manage menus, orders, staff, revenue reports, and customer interactions effectively.",
+    description: "Web system to manage menu, orders, staff, reports, and customer interactions.",
     image: "/images/projects/CoffeeShop.png",
     tag: ["All", "Web"],
     gitUrl: "https://github.com/DatTranDev/CoffeeManagementWeb",
     previewUrl: "/",
+    techStackIds: ["React", ".NET", "SQL Server"]
   },
 ];
 
@@ -123,6 +129,7 @@ const ProjectsSection = () => {
               imgUrl={project.image}
               gitUrl={project.gitUrl}
               previewUrl={project.previewUrl}
+              techStackIds={project.techStackIds}
             />
           </motion.li>
         ))}
