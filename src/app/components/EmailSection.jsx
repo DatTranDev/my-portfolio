@@ -39,8 +39,7 @@ const EmailSection = () => {
     if (response.status === 200) {
       console.log("Message sent.");
       setEmailSubmitted(true);
-    }
-    else{
+    } else {
       console.log("Error sending message.");
     }
     setLoading(false);
@@ -66,7 +65,7 @@ const EmailSection = () => {
           <Link href="https://github.com/DatTranDev">
             <Image src={GithubIcon} alt="Github Icon" />
           </Link>
-          <Link href="https://www.linkedin.com/in/th%C3%A0nh-%C4%91%E1%BA%A1t-tr%E1%BA%A7n-7132b6292/">
+          <Link href="https://www.linkedin.com/in/dat-tran-dev/">
             <Image src={LinkedinIcon} alt="Linkedin Icon" />
           </Link>
           <Link href="https://mail.google.com/mail/?view=cm&fs=1&to=dattran.uit.se@gmail.com&su=Liên hệ hợp tác&body=Chào bạn Đạt,%0AMình muốn trao đổi về...">
