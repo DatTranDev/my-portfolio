@@ -1,39 +1,43 @@
 "use client";
 import React, { useState, useRef } from "react";
 import ProjectCard from "./ProjectCard";
-import ProjectTag from "./ProjectTag";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 
 const projectsData = [
   {
     id: 1,
     title: "Teaching Assistant",
-    description: "Mobile app for managing classes, attendance, discussions, and feedback in real-time.",
+    description:
+      "Mobile app for managing classes, attendance, discussions, and feedback in real-time.",
     image: "/images/projects/TeachingAssistant.png",
     tag: ["All", "Mobile"],
     gitUrl: "https://github.com/DatTranDev/TeachingAssistantBE",
-    previewUrl: "https://drive.google.com/file/d/1Zjc40ntRcGHRqd_4H7RIh6JjEf2EVQdS/view",
-    techStackIds: ["Node.js", "MongoDB", "React Native", "Firebase"]
+    previewUrl:
+      "https://drive.google.com/file/d/1Zjc40ntRcGHRqd_4H7RIh6JjEf2EVQdS/view",
+    techStackIds: ["Node.js", "MongoDB", "React Native", "Firebase"],
+    featured: true,
   },
   {
     id: 2,
     title: "Expense Tracker",
-    description: "App for tracking income, expenses, and personal budgets with visual insights.",
+    description:
+      "App for tracking income, expenses, and personal budgets with visual insights.",
     image: "/images/projects/ExpenseTracker.png",
     tag: ["All", "Mobile"],
     gitUrl: "https://github.com/DatTranDev/ExpenseTrackerBE",
     previewUrl: "https://github.com/DatTranDev/ExpenseTrackerBE",
-    techStackIds: ["Node.js", "MongoDB", "Android", "Firebase"]
+    techStackIds: ["Node.js", "MongoDB", "Android", "Firebase"],
   },
   {
     id: 3,
-    title: "Book Store Management System",
-    description: "Desktop app to manage bookstore inventory, sales, customers, and reports.",
+    title: "Book Store Management",
+    description:
+      "Desktop app to manage bookstore inventory, sales, customers, and reports.",
     image: "/images/projects/BookStore.png",
     tag: ["All", "Desktop"],
     gitUrl: "https://github.com/DatTranDev/QuanLiNhaSach-UIT",
     previewUrl: "https://github.com/DatTranDev/QuanLiNhaSach-UIT",
-    techStackIds: [".NET", "SQL Server"]
+    techStackIds: [".NET", "SQL Server"],
   },
   {
     id: 4,
@@ -43,92 +47,120 @@ const projectsData = [
     tag: ["All", "Web"],
     gitUrl: "https://github.com/DatTranDev/EcommerceWeb",
     previewUrl: "https://github.com/DatTranDev/EcommerceWeb",
-    techStackIds: ["MySQL", "Java Servlet"]
+    techStackIds: ["MySQL", "Java Servlet"],
   },
   {
     id: 5,
     title: "Skill Exchange",
-    description: "Mobile platform for matching users to exchange skills and chat via ELO-based system.",
+    description:
+      "Mobile platform for matching users to exchange skills via ELO-based system.",
     image: "/images/projects/SkillExchange.png",
     tag: ["All", "Mobile"],
     gitUrl: "https://github.com/DatTranDev/SkillExchange",
     previewUrl: "/",
-    techStackIds: ["Node.js", "MongoDB", "React Native", "Firebase"]
+    techStackIds: ["Node.js", "MongoDB", "React Native", "Firebase"],
   },
   {
     id: 6,
     title: "Coffee Management",
-    description: "Web system to manage menu, orders, staff, reports, and customer interactions.",
+    description:
+      "Web system to manage menu, orders, staff, reports, and customers.",
     image: "/images/projects/CoffeeShop.png",
     tag: ["All", "Web"],
     gitUrl: "https://github.com/DatTranDev/CoffeeManagementWeb",
     previewUrl: "/",
-    techStackIds: ["React", ".NET", "SQL Server"]
+    techStackIds: ["React", ".NET", "SQL Server"],
   },
 ];
 
+const tags = ["All", "Web", "Mobile", "Desktop"];
 
 const ProjectsSection = () => {
-  const [tag, setTag] = useState("All");
+  const [activeTag, setActiveTag] = useState("All");
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
-  const handleTagChange = (newTag) => {
-    setTag(newTag);
-  };
-
   const filteredProjects = projectsData.filter((project) =>
-    project.tag.includes(tag)
+    project.tag.includes(activeTag)
   );
 
-  const cardVariants = {
-    initial: { y: 50, opacity: 0 },
-    animate: { y: 0, opacity: 1 },
-  };
-
   return (
-    <section id="projects">
-      <h2 className="text-center text-4xl font-bold text-white mt-4 mb-8 md:mb-12">
-        My Projects
-      </h2>
-      <div className="text-white flex flex-row justify-center items-center gap-2 py-6">
-        <ProjectTag
-          onClick={handleTagChange}
-          name="All"
-          isSelected={tag === "All"}
+    <section id="projects" className="py-16 md:py-24">
+      {/* Section Header */}
+      <motion.div
+        className="text-center mb-12"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <h2 className="font-outfit font-black text-4xl md:text-5xl lg:text-6xl mb-4">
+          <span className="text-gradient-thermal">My Projects</span>
+        </h2>
+        <motion.div
+          className="h-1 w-24 mx-auto bg-gradient-to-r from-ember to-teal rounded-full"
+          initial={{ scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
         />
-        <ProjectTag
-          onClick={handleTagChange}
-          name="Web"
-          isSelected={tag === "Web"}
-        />
-        <ProjectTag
-          onClick={handleTagChange}
-          name="Mobile"
-          isSelected={tag === "Mobile"}
-        />
-      </div>
-      <ul ref={ref} className="grid md:grid-cols-3 gap-8 md:gap-12">
-        {filteredProjects.map((project, index) => (
-          <motion.li
-            key={index}
-            variants={cardVariants}
-            initial="initial"
-            animate={isInView ? "animate" : "initial"}
-            transition={{ duration: 0.3, delay: index * 0.4 }}
+        <p className="text-silver mt-6 max-w-lg mx-auto">
+          A collection of projects showcasing my development journey
+        </p>
+      </motion.div>
+
+      {/* Filter Tags */}
+      <motion.div
+        className="flex flex-wrap justify-center gap-3 mb-12"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        {tags.map((tag) => (
+          <button
+            key={tag}
+            onClick={() => setActiveTag(tag)}
+            className={`px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 ${
+              activeTag === tag
+                ? "bg-gradient-to-r from-ember to-ember-light text-white shadow-glow-sm"
+                : "bg-night-lighter text-silver border border-silver/10 hover:border-ember/30 hover:text-silver-light"
+            }`}
           >
-            <ProjectCard
-              key={project.id}
-              title={project.title}
-              description={project.description}
-              imgUrl={project.image}
-              gitUrl={project.gitUrl}
-              previewUrl={project.previewUrl}
-              techStackIds={project.techStackIds}
-            />
-          </motion.li>
+            {tag}
+          </button>
         ))}
-      </ul>
+      </motion.div>
+
+      {/* Projects Grid */}
+      <motion.div
+        ref={ref}
+        className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+        layout
+      >
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={isInView ? { opacity: 1, scale: 1 } : {}}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+            >
+              <ProjectCard
+                title={project.title}
+                description={project.description}
+                imgUrl={project.image}
+                gitUrl={project.gitUrl}
+                previewUrl={project.previewUrl}
+                techStackIds={project.techStackIds}
+                featured={project.featured}
+              />
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </section>
   );
 };

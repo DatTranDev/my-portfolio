@@ -1,0 +1,179 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      /* ═══════════════════════════════════════════════════════════════════════
+         CYAN OCEAN COLOR SYSTEM - Water Element (Mệnh Thủy)
+         ═════════════════════════════════════════════════════════════════════ */
+      colors: {
+        // Cyan Colors - Primary Theme
+        cyan: {
+          DEFAULT: "#06B6D4",
+          light: "#67E8F9",
+          dark: "#0891B2",
+          pale: "#CFFAFE",
+        },
+        // Secondary Blue Colors
+        ocean: {
+          DEFAULT: "#0EA5E9", // sky-500
+          light: "#38BDF8",   // sky-400
+          dark: "#0369A1",    // sky-700
+          deep: "#0C4A6E",    // sky-900
+        },
+        sky: {
+          DEFAULT: "#38BDF8",
+          light: "#BAE6FD",
+          dark: "#0284C7",
+        },
+        // Background Colors - Deep Ocean
+        night: {
+          DEFAULT: "#050C16", // Darker for high contrast
+          light: "#0A1628",
+          lighter: "#122540",
+          elevated: "#183050",
+        },
+        // Text Colors
+        silver: {
+          DEFAULT: "#94A3B8",
+          light: "#E2E8F0",
+          dark: "#64748B",
+          accent: "#22D3EE",
+        },
+      },
+      
+      /* ═══════════════════════════════════════════════════════════════════════
+         TYPOGRAPHY
+         ═════════════════════════════════════════════════════════════════════ */
+      fontFamily: {
+        outfit: ["var(--font-outfit)", "system-ui", "sans-serif"],
+        sora: ["var(--font-sora)", "system-ui", "sans-serif"],
+      },
+      fontSize: {
+        "display-xl": ["5rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
+        "display-lg": ["4rem", { lineHeight: "1.1", letterSpacing: "-0.02em" }],
+        "display-md": ["3rem", { lineHeight: "1.2", letterSpacing: "-0.01em" }],
+        "display-sm": ["2rem", { lineHeight: "1.3", letterSpacing: "-0.01em" }],
+      },
+      
+      /* ═══════════════════════════════════════════════════════════════════════
+         GRADIENTS & BACKGROUNDS
+         ═════════════════════════════════════════════════════════════════════ */
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-nature":
+          "linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%)",
+        "gradient-cyan": "linear-gradient(135deg, #0891B2 0%, #67E8F9 100%)",
+        "gradient-water": "linear-gradient(135deg, #0284C7 0%, #38BDF8 100%)",
+        "gradient-pale": "linear-gradient(135deg, #CFFAFE 0%, #22D3EE 100%)",
+        "gradient-night":
+          "linear-gradient(180deg, #050C16 0%, #0A1628 50%, #0F1D32 100%)",
+      },
+      
+      /* ═══════════════════════════════════════════════════════════════════════
+         SHADOWS
+         ═════════════════════════════════════════════════════════════════════ */
+      boxShadow: {
+        glow: "0 0 40px rgba(6, 182, 212, 0.3)",
+        "glow-ocean": "0 0 40px rgba(14, 165, 233, 0.3)",
+        "glow-sm": "0 0 20px rgba(6, 182, 212, 0.2)",
+        "glow-lg": "0 0 60px rgba(6, 182, 212, 0.4)",
+        soft: "0 2px 15px rgba(0, 0, 0, 0.3)",
+        elevated: "0 8px 30px rgba(0, 0, 0, 0.4)",
+        deep: "0 20px 50px rgba(0, 0, 0, 0.5)",
+      },
+      
+      /* ═══════════════════════════════════════════════════════════════════════
+         ANIMATIONS
+         ═════════════════════════════════════════════════════════════════════ */
+      animation: {
+        "fade-in": "fadeIn 0.6s ease-out forwards",
+        "fade-up": "fadeUp 0.6s ease-out forwards",
+        "slide-in-left": "slideInLeft 0.6s ease-out forwards",
+        "slide-in-right": "slideInRight 0.6s ease-out forwards",
+        "scale-in": "scaleIn 0.5s ease-out forwards",
+        float: "float 6s ease-in-out infinite",
+        "pulse-cyan": "pulseCyan 2s ease-in-out infinite",
+        shimmer: "shimmer 3s ease-in-out infinite",
+        "gradient-shift": "gradientShift 8s ease infinite",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        fadeUp: {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        slideInLeft: {
+          "0%": { opacity: "0", transform: "translateX(-30px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        slideInRight: {
+          "0%": { opacity: "0", transform: "translateX(30px)" },
+          "100%": { opacity: "1", transform: "translateX(0)" },
+        },
+        scaleIn: {
+          "0%": { opacity: "0", transform: "scale(0.9)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        pulseCyan: {
+          "0%, 100%": { boxShadow: "0 0 0 0 rgba(6, 182, 212, 0.4)" },
+          "50%": { boxShadow: "0 0 20px 10px rgba(6, 182, 212, 0)" },
+        },
+        shimmer: {
+          "0%": { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
+        gradientShift: {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
+      },
+      
+      /* ═══════════════════════════════════════════════════════════════════════
+         TRANSITIONS
+         ═════════════════════════════════════════════════════════════════════ */
+      transitionDuration: {
+        fast: "150ms",
+        base: "250ms",
+        slow: "400ms",
+      },
+      transitionTimingFunction: {
+        spring: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        smooth: "cubic-bezier(0.4, 0, 0.2, 1)",
+      },
+      
+      /* ═══════════════════════════════════════════════════════════════════════
+         SPACING & LAYOUT
+         ═════════════════════════════════════════════════════════════════════ */
+      spacing: {
+        18: "4.5rem",
+        22: "5.5rem",
+        88: "22rem",
+        112: "28rem",
+        128: "32rem",
+      },
+      borderRadius: {
+        "4xl": "2rem",
+        "5xl": "2.5rem",
+      },
+      backdropBlur: {
+        xs: "2px",
+      },
+    },
+  },
+  plugins: [],
+};
