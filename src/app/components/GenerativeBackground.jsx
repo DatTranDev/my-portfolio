@@ -233,18 +233,20 @@ class Particle {
   }
 }
 
+const config = {
+  particleCount: 180,
+  noiseScale: 0.0018,
+  speed: 0.12,
+  fadeAmount: 0.015,
+};
+
 const GenerativeBackground = ({ children }) => {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const particlesRef = useRef([]);
   const noiseRef = useRef(null);
   
-  const config = {
-    particleCount: 180,
-    noiseScale: 0.0018,
-    speed: 0.12,
-    fadeAmount: 0.015,
-  };
+
   
   const initParticles = useCallback((canvas) => {
     if (!noiseRef.current) {
@@ -255,7 +257,7 @@ const GenerativeBackground = ({ children }) => {
     for (let i = 0; i < config.particleCount; i++) {
       particlesRef.current.push(new Particle(canvas, noiseRef.current, config));
     }
-  }, [config.particleCount]);
+  }, []);
   
   const animate = useCallback((ctx, canvas, startTime) => {
     const time = Date.now() - startTime;
@@ -273,7 +275,7 @@ const GenerativeBackground = ({ children }) => {
     animationRef.current = requestAnimationFrame(() => 
       animate(ctx, canvas, startTime)
     );
-  }, [config.fadeAmount]);
+  }, []);
   
   useEffect(() => {
     const canvas = canvasRef.current;

@@ -101,7 +101,7 @@ const Navbar = () => {
                 href="#contact"
                 className="ml-4 px-5 py-2.5 bg-gradient-to-r from-ember to-ember-light text-white font-semibold text-sm rounded-full hover:shadow-glow transition-all duration-300 hover:scale-105"
               >
-                Let's Talk
+                Let&apos;s Talk
               </Link>
             </motion.div>
           </div>
@@ -161,7 +161,7 @@ const Navbar = () => {
                   onClick={() => setNavbarOpen(false)}
                   className="block w-full py-3 text-center bg-gradient-to-r from-cyan to-ocean text-white font-semibold rounded-xl hover:shadow-glow transition-all duration-300"
                 >
-                  Let's Talk
+                  Let&apos;s Talk
                 </Link>
               </motion.div>
             </div>

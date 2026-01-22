@@ -49,7 +49,7 @@ const HeroSection = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
             >
-              Hello, I'm
+              Hello, I&apos;m
             </motion.span>
             <motion.span
               className="block font-outfit font-black text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-tight"
@@ -112,7 +112,7 @@ const HeroSection = () => {
                 href="#contact"
                 className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-nature to-cyan text-white font-bold rounded-2xl shadow-glow-nature hover:shadow-glow-cyan transition-all duration-300 overflow-hidden"
               >
-                <span className="relative z-10">Let's Connect</span>
+                <span className="relative z-10">Let&apos;s Connect</span>
                 <motion.svg
                   className="w-5 h-5 relative z-10"
                   fill="none"
