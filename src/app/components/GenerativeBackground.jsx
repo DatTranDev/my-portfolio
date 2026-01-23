@@ -1,20 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useCallback } from "react";
-
-/**
- * ALGORITHMIC PHILOSOPHY: "Cyan Ocean" - Water Element
- * 
- * This generative background visualizes the depth and flow of the ocean:
- * Water (Thủy) represents wisdom, flexibility, and depth.
- * 
- * Particles flow like deep ocean currents,
- * their colors transitioning from deep abyss blues to electric cyans.
- * The movement is organic, driven by Perlin-like noise fields,
- * creating wave-like patterns that feel immersive and digital.
- * 
- * Each particle leaves a subtle trail, accumulating into patterns
- * reminiscent of bioluminescence and flowing data streams.
- */
+import React, { useEffect, useRef, useCallback, useState } from "react";
 
 // Simplex noise implementation for smooth, organic movement
 class SimplexNoise {
@@ -233,34 +218,48 @@ class Particle {
   }
 }
 
-const config = {
-  particleCount: 180,
+// Dynamic configuration based on device capability
+const getDeviceConfig = (isMobile) => ({
+  particleCount: isMobile ? 60 : 180, // Reduced by ~66% on mobile
   noiseScale: 0.0018,
   speed: 0.12,
   fadeAmount: 0.015,
-};
+});
 
 const GenerativeBackground = ({ children }) => {
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const particlesRef = useRef([]);
   const noiseRef = useRef(null);
-  
+  const [isMobile, setIsMobile] = useState(false);
 
+  // Detect mobile device on mount
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.matchMedia("(max-width: 768px)").matches);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
   
-  const initParticles = useCallback((canvas) => {
+  const initParticles = useCallback((canvas, mobileStatus) => {
     if (!noiseRef.current) {
       noiseRef.current = new SimplexNoise(54321);
     }
     
+    // Get config based on current mobile status
+    const currentConfig = getDeviceConfig(mobileStatus);
+
     particlesRef.current = [];
-    for (let i = 0; i < config.particleCount; i++) {
-      particlesRef.current.push(new Particle(canvas, noiseRef.current, config));
+    for (let i = 0; i < currentConfig.particleCount; i++) {
+      particlesRef.current.push(new Particle(canvas, noiseRef.current, currentConfig));
     }
   }, []);
   
   const animate = useCallback((ctx, canvas, startTime) => {
     const time = Date.now() - startTime;
+    const config = getDeviceConfig(isMobile); // Use current config for fadeAmount
     
     // Subtle fade for trail effect - deep aurora background
     ctx.fillStyle = `rgba(2, 4, 10, ${config.fadeAmount})`;
@@ -275,23 +274,26 @@ const GenerativeBackground = ({ children }) => {
     animationRef.current = requestAnimationFrame(() => 
       animate(ctx, canvas, startTime)
     );
-  }, []);
+  }, [isMobile]); // Re-create animate if mobile status changes
   
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: false }); // Optimize: alpha false if opaque bg
     
     const handleResize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // optimization: Cap DPR to 1 on mobile to save GPU
+      const maxDpr = isMobile ? 1 : 2;
+      const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+      
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
       ctx.scale(dpr, dpr);
       
-      initParticles(canvas);
+      initParticles(canvas, isMobile);
       
       // Fill with deep aurora background
       ctx.fillStyle = "rgb(2, 4, 10)";
@@ -310,7 +312,7 @@ const GenerativeBackground = ({ children }) => {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [initParticles, animate]);
+  }, [initParticles, animate, isMobile]);
   
   return (
     <div className="relative min-h-screen overflow-hidden bg-night">

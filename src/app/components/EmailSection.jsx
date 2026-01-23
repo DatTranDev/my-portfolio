@@ -132,7 +132,7 @@ const EmailSection = () => {
             ))}
           </div>
 
-          {/* Decorative Element */}
+          {/* Decorative Element
           <div className="mt-12 hidden md:block">
             <div className="relative w-48 h-48">
               <div className="absolute inset-0 bg-gradient-to-br from-ember/20 to-teal/20 rounded-3xl blur-2xl" />
@@ -153,7 +153,7 @@ const EmailSection = () => {
                 </motion.div>
               </div>
             </div>
-          </div>
+          </div> */}
         </motion.div>
 
         {/* Right Column - Form */}
