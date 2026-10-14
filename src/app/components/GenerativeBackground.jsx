@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useCallback, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 // Simplex noise implementation for smooth, organic movement
 class SimplexNoise {
@@ -154,7 +154,7 @@ class Particle {
     this.vx = 0;
     this.vy = 0;
     this.age = 0;
-    this.maxAge = 250 + Math.random() * 350;
+    this.maxAge = 90 + Math.random() * 90;
     this.size = 0.5 + Math.random() * 1.5;
   }
   
@@ -218,102 +218,89 @@ class Particle {
   }
 }
 
-// Dynamic configuration based on device capability
+// A bounded particle pool in CSS pixels; backing-store pixels only affect resolution.
 const getDeviceConfig = (isMobile) => ({
-  particleCount: isMobile ? 60 : 180, // Reduced by ~66% on mobile
+  particleCount: isMobile ? 24 : 64,
   noiseScale: 0.0018,
   speed: 0.12,
-  fadeAmount: 0.015,
+  fadeAmount: 0.09,
 });
 
 const GenerativeBackground = ({ children }) => {
   const canvasRef = useRef(null);
-  const animationRef = useRef(null);
-  const particlesRef = useRef([]);
-  const noiseRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile device on mount
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.matchMedia("(max-width: 768px)").matches);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-  
-  const initParticles = useCallback((canvas, mobileStatus) => {
-    if (!noiseRef.current) {
-      noiseRef.current = new SimplexNoise(54321);
-    }
-    
-    // Get config based on current mobile status
-    const currentConfig = getDeviceConfig(mobileStatus);
-
-    particlesRef.current = [];
-    for (let i = 0; i < currentConfig.particleCount; i++) {
-      particlesRef.current.push(new Particle(canvas, noiseRef.current, currentConfig));
-    }
-  }, []);
-  
-  const animate = useCallback((ctx, canvas, startTime) => {
-    const time = Date.now() - startTime;
-    const config = getDeviceConfig(isMobile); // Use current config for fadeAmount
-    
-    // Subtle fade for trail effect - deep aurora background
-    ctx.fillStyle = `rgba(2, 4, 10, ${config.fadeAmount})`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // Update and draw particles
-    particlesRef.current.forEach(particle => {
-      particle.update(time);
-      particle.draw(ctx);
-    });
-    
-    animationRef.current = requestAnimationFrame(() => 
-      animate(ctx, canvas, startTime)
-    );
-  }, [isMobile]); // Re-create animate if mobile status changes
-  
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext("2d", { alpha: false }); // Optimize: alpha false if opaque bg
-    
-    const handleResize = () => {
-      // optimization: Cap DPR to 1 on mobile to save GPU
-      const maxDpr = isMobile ? 1 : 2;
-      const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
-      
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      ctx.scale(dpr, dpr);
-      
-      initParticles(canvas, isMobile);
-      
-      // Fill with deep aurora background
+    const ctx = canvas?.getContext("2d", { alpha: false });
+    if (!ctx) return;
+
+    const noise = new SimplexNoise(54321);
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let bounds = { width: 0, height: 0 };
+    let particles = [];
+    let config;
+    let animationId = null;
+    let lastFrame = null;
+    let elapsed = 0;
+    const frameInterval = 1000 / 30;
+
+    const clear = () => {
       ctx.fillStyle = "rgb(2, 4, 10)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, bounds.width, bounds.height);
     };
-    
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    
-    const startTime = Date.now();
-    animate(ctx, canvas, startTime);
-    
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+    const resize = () => {
+      const isMobile = window.innerWidth <= 768;
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1 : 1.5);
+      bounds = { width: window.innerWidth, height: window.innerHeight };
+      canvas.width = Math.round(bounds.width * dpr);
+      canvas.height = Math.round(bounds.height * dpr);
+      canvas.style.width = `${bounds.width}px`;
+      canvas.style.height = `${bounds.height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      config = getDeviceConfig(isMobile);
+      particles = Array.from({ length: config.particleCount }, () => new Particle(bounds, noise, config));
+      clear();
+    };
+    const animate = (timestamp) => {
+      if (lastFrame === null) lastFrame = timestamp - frameInterval;
+      const delta = timestamp - lastFrame;
+      if (delta >= frameInterval - 0.5) {
+        lastFrame = timestamp;
+        elapsed += Math.min(delta, 100);
+        ctx.fillStyle = `rgba(2, 4, 10, ${config.fadeAmount})`;
+        ctx.fillRect(0, 0, bounds.width, bounds.height);
+        for (const particle of particles) {
+          particle.update(elapsed);
+          particle.draw(ctx);
+        }
       }
+      animationId = requestAnimationFrame(animate);
     };
-  }, [initParticles, animate, isMobile]);
-  
+    const syncAnimation = () => {
+      if (animationId !== null) cancelAnimationFrame(animationId);
+      animationId = null;
+      lastFrame = null;
+      clear();
+      if (!document.hidden && !reducedMotion.matches) animationId = requestAnimationFrame(animate);
+    };
+    const handleResize = () => {
+      resize();
+      syncAnimation();
+    };
+    resize();
+    syncAnimation();
+    window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", syncAnimation);
+    reducedMotion.addEventListener("change", syncAnimation);
+    return () => {
+      if (animationId !== null) cancelAnimationFrame(animationId);
+      window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", syncAnimation);
+      reducedMotion.removeEventListener("change", syncAnimation);
+      particles = [];
+    };
+  }, []);
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-night">
       {/* Generative Canvas */}
